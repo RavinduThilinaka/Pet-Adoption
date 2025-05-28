@@ -4,20 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaPaw, FaBone, FaHeart, FaPhone, FaHome, FaBars } from 'react-icons/fa';
 
 const BubbleAnimation = () => {
-  // Create a wider range of starting positions
   const createBubbleConfig = () => {
     const positions = [];
     for (let i = 0; i < 20; i++) {
-      const startX = `${i * 5}%`; // Distribute evenly across 100% width
-      const randomOffset = Math.random() * 20 - 10; // Random offset between -10% and +10%
-      const endX = `${Math.min(Math.max(i * 5 + randomOffset, 0), 100)}%`; // Keep within 0-100%
+      const startX = `${i * 5}%`;
+      const randomOffset = Math.random() * 20 - 10;
+      const endX = `${Math.min(Math.max(i * 5 + randomOffset, 0), 100)}%`;
       
       positions.push({
         startX,
         endX,
-        size: Math.random() * 40 + 20, // Random size between 20-60px
-        duration: Math.random() * 4 + 4, // Random duration between 4-8s
-        delay: Math.random() * 8, // Random delay up to 8s
+        size: Math.random() * 40 + 20,
+        duration: Math.random() * 4 + 4,
+        delay: Math.random() * 8,
       });
     }
     return positions;
@@ -33,9 +32,9 @@ const BubbleAnimation = () => {
           className="absolute rounded-full"
           style={{
             background: `radial-gradient(circle at center, 
-              rgba(165, 243, 252, 0.3) 0%,
-              rgba(34, 211, 238, 0.2) 50%,
-              rgba(103, 232, 249, 0.1) 100%)`
+              rgba(255, 216, 208, 0.3) 0%,
+              rgba(255, 167, 153, 0.2) 50%,
+              rgba(255, 138, 120, 0.1) 100%)`
           }}
           initial={{
             width: config.size,
@@ -66,6 +65,15 @@ const BubbleAnimation = () => {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
     { name: 'Home', path: '/', icon: <FaHome /> },
@@ -96,11 +104,15 @@ const Navbar = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="bg-gradient-to-r from-cyan-600 via-teal-500 to-cyan-600 p-4 fixed w-full z-50 shadow-lg relative overflow-hidden"
+      className={`fixed w-full z-50 shadow-lg transition-all duration-300 ${
+        scrolled 
+          ? 'bg-gradient-to-r from-teal-700 to-coral-600 py-2 shadow-xl' 
+          : 'bg-gradient-to-r from-teal-600 to-coral-500 py-4'
+      }`}
     >
       <BubbleAnimation />
       <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 px-4">
         <div className="flex items-center justify-between">
           {/* Logo Section */}
           <motion.div 
@@ -137,7 +149,7 @@ const Navbar = () => {
               >
                 <Link
                   to={item.path}
-                  className="flex items-center space-x-2 text-white hover:text-cyan-100 transition-colors duration-300"
+                  className="flex items-center space-x-2 text-white hover:text-teal-100 transition-colors duration-300"
                 >
                   <motion.span 
                     className="text-lg drop-shadow-lg"
@@ -157,7 +169,7 @@ const Navbar = () => {
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
                       exit={{ width: 0 }}
-                      className="h-0.5 bg-cyan-200 absolute bottom-0 left-0 shadow-lg"
+                      className="h-0.5 bg-teal-200 absolute bottom-0 left-0 shadow-lg"
                       transition={{ duration: 0.2 }}
                     />
                   )}
@@ -168,7 +180,7 @@ const Navbar = () => {
               whileHover={{ 
                 scale: 1.05,
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                color: '#0891b2'
+                color: '#0d9488'
               }}
               whileTap={{ scale: 0.95 }}
               className="bg-white/10 border-2 border-white/50 text-white px-6 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-xl backdrop-blur-sm drop-shadow-lg"
@@ -206,7 +218,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={item.path}
-                    className="flex items-center space-x-4 text-white hover:text-cyan-100 transition-colors duration-300"
+                    className="flex items-center space-x-4 text-white hover:text-teal-100 transition-colors duration-300"
                     onClick={() => setIsOpen(false)}
                   >
                     <motion.span 
@@ -224,7 +236,7 @@ const Navbar = () => {
                 whileHover={{ 
                   scale: 1.02,
                   backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  color: '#0891b2'
+                  color: '#0d9488'
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="w-full mt-4 bg-white/10 border-2 border-white/50 text-white px-6 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-xl backdrop-blur-sm drop-shadow-lg"
