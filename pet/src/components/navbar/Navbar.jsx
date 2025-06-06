@@ -1,252 +1,200 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaPaw, FaBone, FaHeart, FaPhone, FaHome, FaBars } from 'react-icons/fa';
-
-const BubbleAnimation = () => {
-  const createBubbleConfig = () => {
-    const positions = [];
-    for (let i = 0; i < 20; i++) {
-      const startX = `${i * 5}%`;
-      const randomOffset = Math.random() * 20 - 10;
-      const endX = `${Math.min(Math.max(i * 5 + randomOffset, 0), 100)}%`;
-      
-      positions.push({
-        startX,
-        endX,
-        size: Math.random() * 40 + 20,
-        duration: Math.random() * 4 + 4,
-        delay: Math.random() * 8,
-      });
-    }
-    return positions;
-  };
-
-  const bubbleConfigs = createBubbleConfig();
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {bubbleConfigs.map((config, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            background: `radial-gradient(circle at center, 
-              rgba(255, 216, 208, 0.3) 0%,
-              rgba(255, 167, 153, 0.2) 50%,
-              rgba(255, 138, 120, 0.1) 100%)`
-          }}
-          initial={{
-            width: config.size,
-            height: config.size,
-            x: config.startX,
-            y: "120%",
-            opacity: 0
-          }}
-          animate={{
-            y: [null, "-120%"],
-            x: [config.startX, config.endX],
-            opacity: [0, 0.6, 0],
-            scale: [1, 1.2, 0.8]
-          }}
-          transition={{
-            duration: config.duration,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: config.delay,
-            times: [0, 0.5, 1]
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+import { motion, AnimatePresence } from "framer-motion";
+import { FaPaw, FaShoppingCart, FaPhoneAlt, FaBars, FaTimes } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [hoveredItem, setHoveredItem] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navItems = [
-    { name: 'Home', path: '/', icon: <FaHome /> },
-    { name: 'Services', path: '/services', icon: <FaBone /> },
-    { name: 'About', path: '/about', icon: <FaHeart /> },
-    { name: 'Contact', path: '/contact', icon: <FaPhone /> },
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+    { name: "About", path: "/about" },
+    { name: "Shop", path: "/shop" },
+    { name: "Contact", path: "/contact" }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0 }
-  };
-
   return (
-    <motion.nav 
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className={`fixed w-full z-50 shadow-lg transition-all duration-300 ${
-        scrolled 
-          ? 'bg-gradient-to-r from-teal-700 to-coral-600 py-2 shadow-xl' 
-          : 'bg-gradient-to-r from-teal-600 to-coral-500 py-4'
-      }`}
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", damping: 10, stiffness: 100 }}
+      className={`fixed w-full z-50 ${scrolled ? "bg-white shadow-lg" : "bg-orange-50"} transition-colors duration-300`}
     >
-      <BubbleAnimation />
-      <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-      <div className="max-w-7xl mx-auto relative z-10 px-4">
-        <div className="flex items-center justify-between">
-          {/* Logo Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
           <motion.div 
-            className="flex items-center space-x-2 backdrop-blur-sm p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="flex items-center space-x-2"
           >
             <motion.div
-              animate={{
-                rotate: [0, 360],
-                scale: [1, 1.2, 1]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-                times: [0, 0.5, 1]
-              }}
+              animate={{ rotate: [0, 15, -15, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
             >
-              <FaPaw className="h-8 w-8 text-white drop-shadow-lg" />
+              <FaPaw className="text-orange-500 text-3xl" />
             </motion.div>
-            <span className="text-2xl font-bold text-white tracking-wider drop-shadow-lg">MyPet</span>
+            <motion.span 
+              className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              PetCare
+            </motion.span>
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <motion.div
-                key={item.name}
-                variants={itemVariants}
-                onHoverStart={() => setHoveredItem(item.name)}
-                onHoverEnd={() => setHoveredItem(null)}
-                className="relative backdrop-blur-sm p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300"
-              >
-                <Link
-                  to={item.path}
-                  className="flex items-center space-x-2 text-white hover:text-teal-100 transition-colors duration-300"
-                >
-                  <motion.span 
-                    className="text-lg drop-shadow-lg"
-                    whileHover={{ 
-                      scale: 1.2,
-                      rotate: 360,
-                      transition: { duration: 0.3 }
-                    }}
-                  >
-                    {item.icon}
-                  </motion.span>
-                  <span className="font-medium drop-shadow-lg">{item.name}</span>
-                </Link>
-                <AnimatePresence>
-                  {hoveredItem === item.name && (
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: '100%' }}
-                      exit={{ width: 0 }}
-                      className="h-0.5 bg-teal-200 absolute bottom-0 left-0 shadow-lg"
-                      transition={{ duration: 0.2 }}
-                    />
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-            <motion.button
-              whileHover={{ 
-                scale: 1.05,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                color: '#0d9488'
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white/10 border-2 border-white/50 text-white px-6 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-xl backdrop-blur-sm drop-shadow-lg"
-            >
-              Book Now
-            </motion.button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white p-2 backdrop-blur-sm rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300"
-          >
-            <FaBars className="h-6 w-6 drop-shadow-lg" />
-          </motion.button>
-        </div>
-
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden mt-4 bg-gradient-to-b from-white/10 to-white/5 rounded-lg backdrop-blur-sm p-2"
-            >
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="flex space-x-6 relative">
               {navItems.map((item) => (
                 <motion.div
                   key={item.name}
-                  variants={itemVariants}
-                  whileHover={{ x: 10, backgroundColor: 'rgba(255, 255, 255, 0.15)' }}
-                  className="py-2 px-3 rounded-lg backdrop-blur-sm mb-2 hover:bg-white/10 transition-all duration-300"
+                  onHoverStart={() => setHoveredItem(item.name)}
+                  onHoverEnd={() => setHoveredItem(null)}
+                  className="relative"
                 >
                   <Link
                     to={item.path}
-                    className="flex items-center space-x-4 text-white hover:text-teal-100 transition-colors duration-300"
-                    onClick={() => setIsOpen(false)}
+                    className={`px-3 py-2 text-lg font-medium ${scrolled ? "text-orange-900" : "text-orange-900"} relative z-10`}
                   >
-                    <motion.span 
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.5 }}
-                      className="text-lg drop-shadow-lg"
-                    >
-                      {item.icon}
-                    </motion.span>
-                    <span className="font-medium drop-shadow-lg">{item.name}</span>
+                    {item.name}
                   </Link>
+                  <AnimatePresence>
+                    {hoveredItem === item.name && (
+                      <motion.div
+                        layoutId="navHover"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute bottom-0 left-0 w-full h-full bg-orange-100 rounded-lg"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))}
+            </div>
+
+            {/* Contact and Cart */}
+            <div className="flex items-center space-x-6 ml-6">
+              <motion.a
+                href="tel:+1234567890"
+                className="flex items-center text-orange-900"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FaPhoneAlt className="mr-2 text-orange-500" />
+                <span className="font-medium">(123) 456-7890</span>
+              </motion.a>
+
               <motion.button
+                className="relative p-2"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                <FaShoppingCart className="text-orange-500 text-xl" />
+                <motion.span
+                  className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                >
+                  3
+                </motion.span>
+              </motion.button>
+
+              <motion.button
+                className="px-6 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-medium shadow-lg"
                 whileHover={{ 
-                  scale: 1.02,
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                  color: '#0d9488'
+                  scale: 1.05,
+                  boxShadow: "0 5px 15px rgba(245, 158, 11, 0.4)"
                 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full mt-4 bg-white/10 border-2 border-white/50 text-white px-6 py-2 rounded-full font-medium transition-all duration-300 hover:shadow-xl backdrop-blur-sm drop-shadow-lg"
               >
                 Book Now
               </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden flex items-center">
+            <motion.button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-orange-900 focus:outline-none"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {isOpen ? (
+                <FaTimes className="h-6 w-6" />
+              ) : (
+                <FaBars className="h-6 w-6" />
+              )}
+            </motion.button>
+          </div>
+        </div>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white shadow-xl overflow-hidden"
+          >
+            <div className="px-4 pt-2 pb-4 space-y-2">
+              {navItems.map((item, index) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link
+                    to={item.path}
+                    className="block px-3 py-3 rounded-lg text-lg font-medium text-orange-900 hover:bg-orange-50"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                </motion.div>
+              ))}
+              
+              <div className="pt-4 mt-4 border-t border-orange-100">
+                <motion.a
+                  href="tel:+1234567890"
+                  className="flex items-center px-3 py-3 text-orange-900"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <FaPhoneAlt className="mr-3 text-orange-500" />
+                  <span className="font-medium">(123) 456-7890</span>
+                </motion.a>
+                
+                <motion.button
+                  className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-medium shadow-lg flex items-center justify-center space-x-2"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FaPaw />
+                  <span>Book Appointment</span>
+                </motion.button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };
