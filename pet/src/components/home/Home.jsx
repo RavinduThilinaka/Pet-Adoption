@@ -1,206 +1,321 @@
-import React from 'react'
-import petcare from '../../assets/pet.mp4'
+import React from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { FaPaw, FaHeart, FaArrowRight, FaStar, FaRegStar, FaDog, FaCat } from 'react-icons/fa';
 
-function Home() {
+const Home = () => {
+  const controls = useAnimation();
+
+  const startBounceAnimation = async () => {
+    await controls.start({
+      y: [0, -20, 0],
+      transition: { duration: 0.8, repeat: Infinity, repeatType: 'reverse' }
+    });
+  };
+
+  React.useEffect(() => {
+    startBounceAnimation();
+  }, []);
+
   return (
-    <main className="relative min-h-screen overflow-hidden">
-      {/* Full-page Video Background */}
-      <div className="fixed inset-0 w-full h-full z-0">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src={petcare} type="video/mp4" />
-        </video>
-        {/* Video Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-indigo-900/70 to-pink-900/80" />
-        <div className="absolute inset-0 backdrop-blur-[2px]" />
+    <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 min-h-screen">
+      {/* Animated floating elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating paw prints */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={`paw-${i}`}
+            className="absolute text-orange-200/30"
+            style={{
+              fontSize: `${Math.random() * 30 + 20}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -40, 0],
+              x: [0, Math.random() * 40 - 20, 0],
+              rotate: [0, Math.random() * 60 - 30, 0],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: Math.random() * 12 + 8,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+            }}
+          >
+            <FaPaw />
+          </motion.div>
+        ))}
+
+        {/* Floating hearts */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`heart-${i}`}
+            className="absolute text-pink-300/20"
+            style={{
+              fontSize: `${Math.random() * 40 + 20}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              scale: [1, 1.3, 1],
+              opacity: [0.1, 0.4, 0.1],
+            }}
+            transition={{
+              duration: Math.random() * 10 + 10,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+            }}
+          >
+            <FaHeart />
+          </motion.div>
+        ))}
       </div>
 
-      {/* Brand Name */}
-      <div className="absolute top-0 left-0 right-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="relative group">
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center 
-                            border border-white/30 shadow-lg transform-gpu transition-all duration-300
-                            group-hover:scale-110 group-hover:rotate-6">
-                <span className="text-2xl animate-bounce">🐾</span>
+      {/* Glowing orb decoration */}
+      <motion.div
+        className="absolute -left-32 -top-32 w-64 h-64 rounded-full bg-gradient-to-r from-orange-300/30 to-amber-300/20 filter blur-3xl"
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.6, 0.8, 0.6],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: 'reverse',
+          ease: 'easeInOut',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left content */}
+          <div className="relative">
+            {/* Animated badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="inline-flex items-center px-4 py-2 bg-white rounded-full shadow-lg mb-8"
+            >
+              <motion.div
+                animate={{ rotate: [0, 15, -15, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="mr-2"
+              >
+                <FaPaw className="text-orange-500 text-lg" />
+              </motion.div>
+              <span className="text-sm font-semibold text-orange-600">
+                Trusted Pet Care Since 2010
+              </span>
+              <div className="ml-3 flex">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar key={i} className="text-amber-400 w-4 h-4" />
+                ))}
               </div>
-              <div className="absolute -inset-1 bg-white/20 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-purple-200 to-pink-200 
-                           animate-shimmer relative">
-                MyPet
-                <span className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"></span>
-              </h1>
-              <p className="text-xs text-white/70 tracking-wider font-medium">CARE & LOVE</p>
-            </div>
-          </div>
-        </div>
-      </div>
+            </motion.div>
 
-      {/* 3D Bubbles */}
-      <div className="fixed inset-0 pointer-events-none z-10">
-        {/* Large Bubble Group 1 */}
-        <div className="absolute -left-4 top-0 animate-float-bubble delay-300">
-          <div className="relative group">
-            <div className="w-32 h-32 rounded-full bg-gradient-to-br from-white/40 to-white/5 
-                          backdrop-blur-sm border border-white/30 shadow-lg transform-gpu 
-                          rotate-45 transition-transform duration-1000
-                          before:content-[''] before:absolute before:inset-0 before:rounded-full 
-                          before:bg-gradient-to-br before:from-white/40 before:to-transparent 
-                          before:blur-sm before:opacity-75
-                          after:content-[''] after:absolute after:w-1/2 after:h-1/2 
-                          after:rounded-full after:bg-white/30 after:top-4 after:left-4 
-                          after:blur-sm group-hover:scale-110">
-              <div className="absolute -inset-1 rounded-full bg-white/10 blur-sm"></div>
-              <div className="absolute -top-2 -left-2 w-4 h-4 rounded-full bg-white/40 blur-sm"></div>
-            </div>
-          </div>
-        </div>
+            {/* Main heading */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900"
+            >
+              <span className="block">Where Pets</span>
+              <span className="block bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+                Get Premium Care
+              </span>
+            </motion.h1>
 
-        {/* Medium Bubble Group */}
-        <div className="absolute left-1/4 top-1/3 animate-float-bubble-reverse delay-1000">
-          <div className="relative group">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-white/30 to-white/5 
-                          backdrop-blur-sm border border-white/30 shadow-lg transform-gpu 
-                          rotate-12 transition-transform duration-1000
-                          before:content-[''] before:absolute before:inset-0 before:rounded-full 
-                          before:bg-gradient-to-br before:from-white/30 before:to-transparent 
-                          before:blur-sm before:opacity-75
-                          after:content-[''] after:absolute after:w-1/2 after:h-1/2 
-                          after:rounded-full after:bg-white/20 after:top-3 after:left-3 
-                          after:blur-sm group-hover:scale-110">
-              <div className="absolute -inset-1 rounded-full bg-white/10 blur-sm"></div>
-              <div className="absolute -top-1 -left-1 w-3 h-3 rounded-full bg-white/40 blur-sm"></div>
-            </div>
-          </div>
-        </div>
+            {/* Subheading */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="mt-6 text-xl md:text-2xl text-gray-600 max-w-2xl"
+            >
+              Our certified specialists provide loving, professional care that keeps 
+              tails wagging and purrs coming 24/7.
+            </motion.p>
 
-        {/* Small Bubble Group */}
-        <div className="absolute right-1/3 top-1/4 animate-float-bubble delay-2000">
-          <div className="relative group">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-white/20 to-white/5 
-                          backdrop-blur-sm border border-white/30 shadow-lg transform-gpu 
-                          -rotate-12 transition-transform duration-1000
-                          before:content-[''] before:absolute before:inset-0 before:rounded-full 
-                          before:bg-gradient-to-br before:from-white/20 before:to-transparent 
-                          before:blur-sm before:opacity-75
-                          after:content-[''] after:absolute after:w-1/2 after:h-1/2 
-                          after:rounded-full after:bg-white/10 after:top-2 after:left-2 
-                          after:blur-sm group-hover:scale-110">
-              <div className="absolute -inset-1 rounded-full bg-white/10 blur-sm"></div>
-              <div className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-white/40 blur-sm"></div>
-            </div>
-          </div>
-        </div>
+            {/* CTA buttons */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-10 flex flex-wrap gap-4"
+            >
+              <motion.button
+                whileHover={{ 
+                  y: -5,
+                  scale: 1.05,
+                  boxShadow: '0 10px 25px -5px rgba(245, 158, 11, 0.4)'
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-5 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all flex items-center group"
+              >
+                <span>Book Appointment</span>
+                <motion.span
+                  animate={controls}
+                  className="ml-3"
+                >
+                  <FaArrowRight />
+                </motion.span>
+                <div className="absolute inset-0 rounded-xl border-2 border-orange-400 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              </motion.button>
 
-        {/* Extra Large Bubble */}
-        <div className="absolute right-1/4 bottom-1/4 animate-float-bubble-slow delay-4000">
-          <div className="relative group">
-            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-white/30 to-white/5 
-                          backdrop-blur-sm border border-white/30 shadow-lg transform-gpu 
-                          rotate-90 transition-transform duration-1000
-                          before:content-[''] before:absolute before:inset-0 before:rounded-full 
-                          before:bg-gradient-to-br before:from-white/30 before:to-transparent 
-                          before:blur-sm before:opacity-75
-                          after:content-[''] after:absolute after:w-1/2 after:h-1/2 
-                          after:rounded-full after:bg-white/20 after:top-5 after:left-5 
-                          after:blur-sm group-hover:scale-110">
-              <div className="absolute -inset-1 rounded-full bg-white/10 blur-sm"></div>
-              <div className="absolute -top-2 -left-2 w-5 h-5 rounded-full bg-white/40 blur-sm"></div>
-            </div>
-          </div>
-        </div>
+              <motion.button
+                whileHover={{ y: -5 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-5 bg-white text-orange-600 rounded-xl font-bold border-2 border-orange-200 hover:bg-orange-50 transition-all shadow-sm hover:shadow-md flex items-center group"
+              >
+                <span>Our Services</span>
+                <motion.div
+                  animate={{ 
+                    x: [0, 5, 0],
+                    transition: { duration: 1.5, repeat: Infinity }
+                  }}
+                  className="ml-3"
+                >
+                  <FaPaw className="text-orange-400" />
+                </motion.div>
+                <div className="absolute inset-0 rounded-xl border-2 border-white opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              </motion.button>
+            </motion.div>
 
-        {/* Hearts */}
-        <div className="absolute left-1/3 top-1/4 animate-float-heart delay-700">
-          <div className="text-pink-500/30 text-4xl">❤️</div>
-        </div>
-        <div className="absolute right-1/4 top-1/3 animate-float-heart delay-1500">
-          <div className="text-pink-500/30 text-3xl">❤️</div>
-        </div>
-        <div className="absolute left-1/4 bottom-1/3 animate-float-heart delay-3000">
-          <div className="text-pink-500/30 text-5xl">❤️</div>
-        </div>
-        <div className="absolute right-1/3 bottom-1/4 animate-float-heart delay-2500">
-          <div className="text-pink-500/30 text-4xl">❤️</div>
-        </div>
-
-        {/* Paw Prints */}
-        <div className="absolute left-10 top-1/2 animate-float-paw delay-1200">
-          <div className="text-white/20 text-3xl">🐾</div>
-        </div>
-        <div className="absolute right-10 bottom-1/3 animate-float-paw delay-2200">
-          <div className="text-white/20 text-4xl">🐾</div>
-        </div>
-      </div>
-
-      {/* Content Layer */}
-      <div className="relative z-20">
-        {/* Hero Content */}
-        <div className="min-h-screen flex items-center justify-center px-4">
-          <div className="max-w-7xl mx-auto w-full py-20">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              {/* Left Content */}
-              <div className="text-center md:text-left space-y-8">
-                <h1 className="text-6xl lg:text-7xl font-bold text-white animate-fade-in">
-                  Loving Care
-                  <span className="block mt-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300 animate-shimmer">
-                    For Your Pets
-                  </span>
-                </h1>
-                
-                <p className="text-lg text-gray-200 max-w-xl mx-auto md:mx-0 animate-slide-up">
-                  Professional pet care services tailored to your furry friend's needs.
-                  Experience the best in comfort and care.
-                </p>
-
-                <div className="flex flex-wrap gap-4 justify-center md:justify-start animate-slide-up delay-200">
-                  <button className="px-8 py-4 bg-white/90 rounded-full text-purple-900 font-bold hover:bg-white transform hover:-translate-y-1 transition-all hover:shadow-xl hover:shadow-white/20 group">
-                    Book Now
-                    <span className="inline-block group-hover:animate-bounce ml-2">🐾</span>
-                  </button>
-                  <button className="px-8 py-4 rounded-full text-white border-2 border-white/50 hover:bg-white/20 transform hover:-translate-y-1 transition-all group">
-                    Our Services
-                    <span className="inline-block group-hover:animate-pulse ml-2">💝</span>
-                  </button>
+            {/* Trust indicators */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              className="mt-16 flex flex-wrap items-center gap-8"
+            >
+              <div className="flex items-center bg-white/80 backdrop-blur-sm px-5 py-3 rounded-xl shadow-sm">
+                <div className="flex -space-x-3">
+                  {[...Array(5)].map((_, i) => (
+                    <motion.img
+                      key={i}
+                      src={`https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${i+10}.jpg`}
+                      alt="Happy customer"
+                      className="w-10 h-10 rounded-full border-2 border-white"
+                      initial={{ x: -5 * i, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.9 + i * 0.1, duration: 0.5 }}
+                    />
+                  ))}
+                </div>
+                <div className="ml-4">
+                  <p className="text-sm font-semibold text-gray-800">500+ Happy Clients</p>
+                  <div className="flex mt-1">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar key={i} className="text-amber-400 w-4 h-4" />
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Right Content - Stats Cards */}
-              <div className="grid grid-cols-2 gap-4 animate-fade-in delay-300">
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all group">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🏆</div>
-                  <h3 className="text-3xl font-bold text-white mb-2">5000+</h3>
-                  <p className="text-gray-300">Happy Pets</p>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
+                  <FaDog className="text-orange-500 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Dogs</span>
                 </div>
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all group">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">💝</div>
-                  <h3 className="text-3xl font-bold text-white mb-2">15+</h3>
-                  <p className="text-gray-300">Years Experience</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all group">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">⭐</div>
-                  <h3 className="text-3xl font-bold text-white mb-2">4.9</h3>
-                  <p className="text-gray-300">Rating</p>
-                </div>
-                <div className="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 hover:bg-white/20 transition-all group">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform">🏠</div>
-                  <h3 className="text-3xl font-bold text-white mb-2">24/7</h3>
-                  <p className="text-gray-300">Care Available</p>
+                <div className="flex items-center bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg shadow-sm">
+                  <FaCat className="text-orange-500 mr-2" />
+                  <span className="text-sm font-medium text-gray-700">Cats</span>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
+
+          {/* Right content - image */}
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-8 border-white transform rotate-1">
+              <img
+                src="https://images.unsplash.com/photo-1586671267731-da2cf3ceeb80?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80"
+                alt="Happy dog with veterinarian"
+                className="w-full h-auto"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-orange-900/30 via-transparent to-transparent" />
+              
+              {/* Animated overlay elements */}
+              <motion.div
+                className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg flex items-center"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 1.2, type: 'spring' }}
+              >
+                <div className="bg-orange-100 p-2 rounded-lg mr-3">
+                  <FaHeart className="text-orange-500" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-gray-500">CERTIFIED</p>
+                  <p className="font-bold text-orange-600">Veterinarians</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute bottom-6 right-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-lg"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 1.4, type: 'spring' }}
+              >
+                <div className="flex items-center">
+                  <div className="bg-amber-100 p-2 rounded-lg mr-3">
+                    <FaPaw className="text-amber-500" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-gray-500">OPEN</p>
+                    <p className="font-bold text-amber-600">24/7 Emergency</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Floating pet elements */}
+            <motion.div
+              className="absolute -bottom-10 -left-10 w-24 h-24 bg-white rounded-full shadow-xl flex items-center justify-center"
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, 10, -10, 0],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                repeatType: 'reverse',
+                ease: 'easeInOut',
+              }}
+            >
+              <div className="text-4xl">🐕</div>
+            </motion.div>
+
+            <motion.div
+              className="absolute -top-10 -right-10 w-20 h-20 bg-white rounded-full shadow-xl flex items-center justify-center"
+              animate={{
+                y: [0, -20, 0],
+                rotate: [0, -15, 15, 0],
+              }}
+              transition={{
+                duration: 7,
+                repeat: Infinity,
+                repeatType: 'reverse',
+                ease: 'easeInOut',
+              }}
+            >
+              <div className="text-3xl">🐈</div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
-    </main>
-  )
-}
+    </div>
+  );
+};
 
-export default Home
+export default Home;
