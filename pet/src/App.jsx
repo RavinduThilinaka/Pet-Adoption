@@ -10,7 +10,7 @@ import Contact from './components/contact/Contact';
 
 function App() {
   return (
-    <Router basename="/Pet-Adoption">
+    <Router basename="/PetCare">
      <Routes>
       <Route
         path='/'
