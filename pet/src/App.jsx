@@ -9,7 +9,7 @@ import About from './components/about/About';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Pet-Adoption">
      <Routes>
       <Route
         path='/'
