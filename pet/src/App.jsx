@@ -4,8 +4,9 @@ import Footer from './components/footer/Footer';
 
 import HeroSection from './components/home/Hero';
 import Service from './components/services/Service';
-import Contact from './components/contact/Contact';
+import Shop from './components/shop/Shop'; // Import the Shop component
 import About from './components/about/About';
+import Contact from './components/contact/Contact';
 
 function App() {
   return (
@@ -16,10 +17,21 @@ function App() {
         element={
           <div>
             <Navbar/>
-            <HeroSection/>
-            <Service/>
-            <About/>
-            <Contact/>
+            <div id="home">
+              <HeroSection/>
+            </div>
+            <div id="services">
+              <Service/>
+            </div>
+            <div id="shop">
+              <Shop/>
+            </div>
+            <div id="about">
+              <About/>
+            </div>
+            <div id="contact">
+              <Contact/>
+            </div>
             <Footer/>
           </div>
         }

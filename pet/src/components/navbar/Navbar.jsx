@@ -1,7 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { FaPaw, FaShoppingCart, FaPhoneAlt, FaBars, FaTimes } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,12 +15,27 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const offset = 80; // Adjust this value based on your navbar height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+    setIsOpen(false); // Close mobile menu after clicking
+  };
+
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Services", path: "/services" },
-    { name: "About", path: "/about" },
-    { name: "Shop", path: "/shop" },
-    { name: "Contact", path: "/contact" }
+    { name: "Home", path: "home" },
+    { name: "Services", path: "services" },
+    { name: "About", path: "about" },
+    { name: "Shop", path: "shop" },
+    { name: "Contact", path: "contact" }
   ];
 
   return (
@@ -36,7 +50,8 @@ const Navbar = () => {
           {/* Logo */}
           <motion.div 
             whileHover={{ scale: 1.05 }}
-            className="flex items-center space-x-2"
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => scrollToSection("home")}
           >
             <motion.div
               animate={{ rotate: [0, 15, -15, 0] }}
@@ -64,12 +79,12 @@ const Navbar = () => {
                   onHoverEnd={() => setHoveredItem(null)}
                   className="relative"
                 >
-                  <Link
-                    to={item.path}
-                    className={`px-3 py-2 text-lg font-medium ${scrolled ? "text-orange-900" : "text-orange-900"} relative z-10`}
+                  <button
+                    onClick={() => scrollToSection(item.path)}
+                    className={`px-3 py-2 text-lg font-medium ${scrolled ? "text-orange-900" : "text-orange-900"} relative z-10 cursor-pointer`}
                   >
                     {item.name}
-                  </Link>
+                  </button>
                   <AnimatePresence>
                     {hoveredItem === item.name && (
                       <motion.div
@@ -120,6 +135,7 @@ const Navbar = () => {
                   boxShadow: "0 5px 15px rgba(245, 158, 11, 0.4)"
                 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => scrollToSection("contact")}
               >
                 Book Now
               </motion.button>
@@ -162,13 +178,12 @@ const Navbar = () => {
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Link
-                    to={item.path}
-                    className="block px-3 py-3 rounded-lg text-lg font-medium text-orange-900 hover:bg-orange-50"
-                    onClick={() => setIsOpen(false)}
+                  <button
+                    onClick={() => scrollToSection(item.path)}
+                    className="block w-full text-left px-3 py-3 rounded-lg text-lg font-medium text-orange-900 hover:bg-orange-50 cursor-pointer"
                   >
                     {item.name}
-                  </Link>
+                  </button>
                 </motion.div>
               ))}
               
@@ -186,6 +201,7 @@ const Navbar = () => {
                   className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-full font-medium shadow-lg flex items-center justify-center space-x-2"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={() => scrollToSection("contact")}
                 >
                   <FaPaw />
                   <span>Book Appointment</span>
